@@ -21,40 +21,49 @@ bool isInteger(const std::string& input) {
     return (stream >> n) && (stream.eof());
 }
 
-void serialExecute(int max) {
+int serialExecute(int max) {
   int primeCount = 0;
   for (int i = 0; i < max; i++) {
     if (isPrime(i)) {
       primeCount++;
     }
   }
-  std::cout << "Prime Count: " << primeCount << std::endl;
+  return primeCount;
 }
 
-void inefficientMultithread(int max) {
-  
+int inefficientMultithread(int max) {
+  int primeCount = 0;
+  return primeCount;
 }
 
-void efficientMultithread(int max) {
+int efficientMultithread(int max) {
+  int primeCount = 0;
+  return primeCount;
 }
 int main(int argc, char *argv[]) {
   if (argc != 3) {
-    std::cout << "Usage:  primesMT maxToCheck mode" << std::endl;
-    exit(0);
-  }
+    std::cout << "Usage:  primesMT maxToCheck mode" <<
+    std::endl;
+    exit(0);}
   if (!isInteger(argv[1]) || !isInteger(argv[2])) {
-    std::cout << "Error: arguments must be integers" << std::endl;
-  }
-  int option = std::stoi(argv[1]);
-  int topValue = std::stoi(argv[2]);
+    std::cout << "Error: arguments must be integers" <<
+    std::endl;
+    exit(0);}
+  int topValue = std::stoi(argv[1]);
+  int option = std::stoi(argv[2]);
+  int returnedPrimeCount = 0;
   switch (option) {
     case 0:
-      serialExecute(topValue);
+      returnedPrimeCount = serialExecute(topValue);
+      break;
     case 1:
-      inefficientMultithread(topValue);
+      returnedPrimeCount = inefficientMultithread(topValue);
+      break;
     case 2:
-      efficientMultithread(topValue);
-  }
+      returnedPrimeCount = efficientMultithread(topValue);
+      break;}
+  std::cout << "Found " << returnedPrimeCount
+    << " prime numbers < " << topValue << std::endl;
 
   exit(0);
 }

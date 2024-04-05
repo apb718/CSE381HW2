@@ -19,14 +19,8 @@ bool isPrime(int n) {
   return true;
 }
 
-//  GPT Generated function
-bool isInteger(const std::string& input) {
-    std::istringstream stream(input);
-    int n;
-    return (stream >> n) && (stream.eof());
-}
-
-void fillVector(std::vector<int>& vec1, std::vector<int>& vec2, int& max) {
+void fillVector(std::vector<size_t>& vec1,
+  std::vector<size_t>& vec2, int& max) {
   for (int i=0; i< max; i+=4) {
     if (i < max) vec1.push_back(i);
     if (i+1 < max) vec1.push_back(i+1);
@@ -44,7 +38,7 @@ void checkTwo(int i, int j, int& accum) {
   }
 }
 
-void checkPrimeVector(std::vector<int>& vec, int& accum) {
+void checkPrimeVector(std::vector<size_t>& vec, int& accum) {
   for (auto& item : vec) {
     if (isPrime(item)) accum++;
   }
@@ -92,7 +86,7 @@ int efficientMultithread(int max) {
   int t1Count = 0;
   int t2Count = 0;
   // std::cout << "Max: " << max << std::endl;
-  std::vector<int> vec1, vec2;
+  std::vector<size_t> vec1, vec2;
   fillVector(vec1, vec2, max);
   // std::cout << "filled vecs" << std::endl;
   thread th1 = thread(checkPrimeVector, std::ref(vec1), std::ref(t1Count));
@@ -104,26 +98,25 @@ int efficientMultithread(int max) {
 }
 
 int main(int argc, char *argv[]) {
+  int topValue, option;
   if (argc != 3) {
     std::cout << "Usage:  primesMT maxToCheck mode" <<
     std::endl;
     exit(0);}
-  if (!isInteger(argv[1]) || !isInteger(argv[2])) {
-    std::cout << "Error: arguments must be integers" <<
-    std::endl;
-    exit(0);}
-  int topValue = std::stoi(argv[1]);
-  int option = std::stoi(argv[2]);
+  try {
+    topValue = std::stoi(argv[1]);
+    option = std::stoi(argv[2]);
+  } catch(std::exception& e) {
+    std::cout << "Error: arguments must be integers" << std::endl;
+    exit(0);
+  }
   int returnedPrimeCount = 0;
   switch (option) {
-    case 0:
-      returnedPrimeCount = serialExecute(topValue);
+    case 0: returnedPrimeCount = serialExecute(topValue);
       break;
-    case 1:
-      returnedPrimeCount = inefficientMultithread(topValue);
+    case 1: returnedPrimeCount = inefficientMultithread(topValue);
       break;
-    default:
-      returnedPrimeCount = efficientMultithread(topValue);
+    default: returnedPrimeCount = efficientMultithread(topValue);
       break;}
   std::cout << "Found " << returnedPrimeCount
     << " prime numbers < " << topValue << std::endl;
